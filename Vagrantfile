@@ -2,22 +2,21 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-#SERVIDOR FTP
 Vagrant.configure("2") do |config|
   config.vm.box = "debian/bookworm64"
-  config.vm.hostname = "servidorftp"
 
-  # Red dentro de clase
-  config.vm.network "public_network"
+  # FTP SERVER
+  config.vm.define "servidor" do |srv|
+    srv.vm.hostname = "servidorftp"
+    srv.vm.network "public_network"
+    srv.vm.provision "shell", path: "provision.sh"
+  end
 
-  config.vm.provision "shell", path: "provision.sh"
+  # CLIENT
+  config.vm.define "cliente" do |cli|
+    cli.vm.hostname = "clienteftp"
+    cli.vm.network "public_network"
+    cli.vm.provision "shell", path: "provision_client.sh"
+  end
 
-end
-
-Vagrant.configure("2") do |config|
-  config.vm.box = "debian/bookworm64"
-  config.vm.hostname = "clienteftp"
-  config.vm.network "public_network"
-  config.vm.provision "shell", path: "provision_client.sh"
-  
 end
