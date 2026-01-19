@@ -29,12 +29,27 @@ Vagrant.configure("2") do |config|
     # Red Privada
     cli.vm.network "private_network", ip: "192.168.56.11"
 
-    # Script de herramientas
+    # Script de herramientas y configuración robusta
     cli.vm.provision "shell", inline: <<-SHELL
       apt-get update
       apt-get install -y lftp ftp nmap net-tools dnsutils
+      
+      # Limpiar entradas incorrectas en /etc/hosts
+      sed -i '/ftp.sistema.sol/d' /etc/hosts
+      
+      # Configuración persistente de DNS usando dhclient
+      if ! grep -q "prepend domain-name-servers 192.168.56.10;" /etc/dhcp/dhclient.conf; then
+        echo "prepend domain-name-servers 192.168.56.10;" >> /etc/dhcp/dhclient.conf
+      fi
+      
+      # Aplicar cambios de DNS
+      ifdown eth0 && ifup eth0 || systemctl restart networking
+      dhclient -r && dhclient
+      
+      # Fallback inmediato para la sesión actual
       echo "nameserver 192.168.56.10" > /etc/resolv.conf
-      echo "Cliente listo. DNS apuntando al servidor FTP."
+      
+      echo "Cliente listo. DNS robusto configurado apuntando al servidor FTP."
     SHELL
   end
 end
