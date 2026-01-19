@@ -7,6 +7,6 @@ $TTL    604800
                          604800 )       ; Negative Cache TTL
 ;
 @       IN      NS      ns.sistema.sol.
-@       IN      A       10.112.7.1
-ns      IN      A       10.112.7.1
-ftp     IN      A       10.112.7.1
+@       IN      A       192.168.56.10
+ns      IN      A       192.168.56.10
+ftp     IN      A       192.168.56.10
