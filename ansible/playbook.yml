@@ -68,7 +68,7 @@
 
     - name: Setup Anonymous Banner
       copy:
-        content: "---You have accessed the public directory server of 'sistema.sol'---"
+        content: "---You have accessed the public directory server of 'sistema.sol' (David y Ángela)--"
         dest: "{{ ftp_root }}/.message"
         mode: '0644'
 
